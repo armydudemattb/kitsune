@@ -15,7 +15,7 @@ def main():
     parser.add_option("-u", "--user",
                       help=("Prefix cron with this user. "
                            "Only define for cron.d style crontabs"))
-    parser.add_option("-p", "--python", default="python2.7",
+    parser.add_option("-p", "--python", default="python",
                       help="Python interpreter to use")
 
     (opts, args) = parser.parse_args()
@@ -24,10 +24,10 @@ def main():
         parser.error("-k must be defined")
 
     ctx = {
-        'django': 'cd %s; source virtualenv/bin/activate; %s %s -W ignore::DeprecationWarning manage.py' % (
-            opts.kitsune, python_path, opts.python),
-        'scripts': 'cd %s; source virtualenv/bin/activate; %s %s' % (
-            opts.kitsune, python_path, opts.python),
+        'django': 'cd %s; source virtualenv/bin/activate; %s -W ignore::DeprecationWarning manage.py' % (
+            opts.kitsune, opts.python),
+        'scripts': 'cd %s; source virtualenv/bin/activate; %s' % (
+            opts.kitsune, opts.python),
     }
     ctx['cron'] = '%s cron' % ctx['django']
     # Source the venv, don't mess with manage.py
