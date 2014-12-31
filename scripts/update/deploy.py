@@ -26,8 +26,7 @@ def update_code(ctx, tag):
     with ctx.lcd(settings.SRC_DIR):
         ctx.local("git fetch")
         ctx.local("git checkout -f %s" % tag)
-        ctx.local("git submodule sync")
-        ctx.local("git submodule update --init --recursive")
+        ctx.local("find -name '*.pyc' -delete")
 
 
 @task
@@ -124,7 +123,8 @@ def setup_dependencies(ctx):
         activate_env = os.path.join(settings.SRC_DIR, 'virtualenv', 'bin', 'activate_this.py')
         execfile(activate_env, dict(__file__=activate_env))
 
-        ctx.local('python2.7 scripts/peep.py install -r requirements/default.txt')
+        ctx.local('pip --version')
+        ctx.local('python2.7 scripts/peep.py install -r requirements/default.txt --no-use-wheel')
         # Make the virtualenv relocatable
         ctx.local('virtualenv-2.7 --relocatable virtualenv')
 
